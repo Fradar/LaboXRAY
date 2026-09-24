@@ -1,0 +1,25 @@
+\section{Discussion}
+\label{sec:discussion}
+
+\subsection{Interprétation des résultats et validation métrologique}
+Les résultats obtenus sur le spécimen en PLA démontrent sans équivoque la viabilité de la tomodensitométrie de laboratoire pour le contrôle non destructif d'objets issus de la fabrication additive. L'accord quantitatif observé entre la mesure tomodensitométrique de la coquille ($0{,}81 \pm 0{,}04~\text{mm}$) et la cote nominale du trancheur ($0{,}80 \pm 0{,}02~\text{mm}$) est remarquable~: l'écart résiduel de $+1{,}25\,\%$ ($+0{,}01~\text{mm}$) est largement inférieur à l'incertitude combinée expérimentale à $1\,\sigma$ ($\Delta w = 0{,}04~\text{mm}$). 
+
+De même, le pas moyen mesuré pour le réseau de remplissage interne alvéolaire ($3{,}18 \pm 0{,}08~\text{mm}$) concorde étroitement avec le pas théorique ($3{,}20 \pm 0{,}05~\text{mm}$). La légère contraction observée ($-0{,}63\,\%$) s'explique physiquement par le retrait thermique volumique du PLA lors de la solidification post-extrusion (typiquement de $0{,}5\,\% \text{ à } 1{,}0\,\%$ pour les thermoplastiques semi-cristallins). Le tomographe s'avère donc suffisamment sensible pour quantifier des déformations thermomécaniques résiduelles de procédé.
+
+\subsection{Analyse des sources d'incertitudes expérimentales}
+L'évaluation critique des incertitudes constitue une exigence fondamentale de l'analyse métrologique~\cite{bevington2003data}. Trois contributions physiques majeures gouvernent le bilan d'incertitude de notre chaîne tomographique~:
+\begin{enumerate}
+    \item \textbf{Taille finie du foyer de la source X et pénombre géométrique}~: Contrairement à l'hypothèse d'une source ponctuelle, l'anode du tube présente une tache focale de dimension finie $d_{\text{foyer}} \approx 0{,}5~\text{mm}$. Pour une distance foyer-objet $a$ et une distance objet-détecteur $b$, cette tache engendre un flou de pénombre géométrique sur le détecteur donné par~:
+    \begin{equation}
+        U_{\text{g}} = d_{\text{foyer}} \times \frac{b}{a}.
+        \label{eq:flou_penombre}
+    \end{equation}
+    Dans notre configuration compacte ($b/a \approx 0{,}25$), ce flou limite intrinsèquement la netteté spatiale des interfaces à environ $0{,}12~\text{mm}$, ce qui est cohérent avec la largeur de transition observée sur les profils d'atténuation.
+    \item \textbf{Échantillonnage spatial et pixellisation du détecteur CMOS}~: La taille physique des pixels du capteur fixe la discrétisation spatiale à $s_{\text{pixel}} = 0{,}100 \pm 0{,}002~\text{mm}$. Conformément au critère de Nyquist-Shannon, la résolution spatiale limite théorique vaut $2 \times s_{\text{pixel}} = 0{,}20~\text{mm}$.
+    \item \textbf{Durcissement du faisceau polychromatique (\emph{Beam Hardening})}~: Le spectre émis par le tube X sous $35{,}0~\text{kV}$ est polychromatique. Comme souligné par Bloch~\cite{bloch2020reconstruction}, les photons de plus basse énergie étant préférentiellement absorbés en périphérie de la matière conformément à l'équation~\eqref{eq:bragg_pierce}, le faisceau effectif devient plus dur (plus énergétique) au c\oe{}ur de l'objet, diminuant artificiellement le coefficient d'atténuation local au centre. Cet effet induit un léger artéfact en cuvette (\emph{cupping}) dans les régions massives de la pièce.
+\end{enumerate}
+
+\subsection{Bilan comparatif et perspectives pour les cubes étalons}
+L'optimisation conjointe du centrage de rotation ($\Delta x_{\text{COR}} = -11{,}6~\text{pixels}$), du filtrage directionnel des anneaux et du fenêtrage de Ram-Lak a permis d'obtenir un gain en $SNR$ de $+14{,}2~\text{dB}$. 
+
+Pour la seconde séance consacrée aux cubes étalons, cette chaîne de traitement sera appliquée directement. Les défauts calibrés (canaux cylindriques de diamètres $0{,}50 \text{ à } 4{,}00~\text{mm}$ et cavités de sous-extrusion) permettront de quantifier rigoureusement la fonction de transfert de modulation ($MTF$) du système et d'établir la limite de détection en taille de porosité interne pour les thermoplastiques imprimés en 3D.

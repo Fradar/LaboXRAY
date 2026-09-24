@@ -1,0 +1,35 @@
+\section{Dispositif expérimental et chaîne de traitement}
+\label{sec:methodologie}
+
+\subsection{Banc de tomodensitométrie de laboratoire}
+Le dispositif expérimental repose sur le système de tomodensitométrie assistée par ordinateur de paillasse de LD DIDACTIC GmbH~\cite{lddidactic2020}. Le système est logé dans une enceinte blindée contre les rayonnements ionisants munie de portes vitrées en verre au plomb avec verrouillage de sécurité électrique. Il comprend trois sous-ensembles principaux~:
+\begin{enumerate}
+    \item \textbf{Source de rayons X}~: Un tube à rayons X à anode d'or (Au) alimenté sous une haute tension stabilisée réglable de $U = 35{,}0 \pm 0{,}1~\text{kV}$ et un courant cathodique régulé de $I = 1{,}00 \pm 0{,}02~\text{mA}$. L'anode d'or a été retenue pour maximiser le flux continu de freinage (\emph{Bremsstrahlung}) et les raies caractéristiques énergétiques ($L_{\alpha} \approx 9{,}7~\text{keV}$, $L_{\beta} \approx 11{,}4~\text{keV}$), idéales pour traverser des pièces thermoplastiques de $20 \text{ à } 30~\text{mm}$.
+    \item \textbf{Platine goniométrique motorisée}~: Une platine tournante pas-à-pas de haute précision entraînant l'échantillon autour de son axe vertical. La répétabilité angulaire nominale est de $\pm 0{,}01^\circ$.
+    \item \textbf{Détecteur matriciel numérique}~: Un écran scintillateur de conversion X-visible couplé à un capteur d'imagerie CMOS haute sensibilité, interfacé par connexion Ethernet. Le temps d'intégration par pose radiologique est ajusté à $t_{\text{int}} = 825 \pm 5~\text{ms}$.
+\end{enumerate}
+
+\subsection{Spécimens d'essai en polymère (PLA)}
+Deux séries d'échantillons en poly(acide lactique) (PLA) sont mises en \oe{}uvre~:
+\begin{itemize}
+    \item \textbf{Spécimen préliminaire (Séance 1)}~: Une pièce de géométrie biomimétique complexe (cheval stylisé) imprimée en laboratoire par dépôt de fil fondu (FDM) à l'aide d'une buse standard de $0{,}40 \pm 0{,}01~\text{mm}$, avec $2$ périmètres extérieurs (épaisseur théorique de $0{,}80 \pm 0{,}02~\text{mm}$) et un taux de remplissage interne de $15 \text{ à } 20\,\%$ en trame triangulaire.
+    \item \textbf{Cubes étalons métrologiques (Séance 2)}~: Des cubes étalons en PLA de dimensions nominales connues ($20 \times 20 \times 20~\text{mm}^3$), intégrant des défauts internes usinés numériquement dans le modèle CAO~: une série de canaux cylindriques traversants de diamètres échelonnés et des encoches internes (fentes et cavités) de profondeurs et largeurs calibrées.
+\end{itemize}
+
+\subsection{Protocole d'acquisition et étalonnage radiométrique}
+Pour chaque objet, la séquence d'acquisition comprend~:
+\begin{enumerate}
+    \item \textbf{Correction du courant d'obscurité (\emph{Dark Field})}~: Tube X éteint, $20$ images consécutives sont moyennées pour enregistrer l'offset thermique de fond $I_{\text{dark}}(u, v)$ et isoler les pixels défectueux.
+    \item \textbf{Correction de champ plat (\emph{Flat Field})}~: Tube X allumé ($35{,}0~\text{kV}$, $1{,}00~\text{mA}$) en l'absence de l'objet, $20$ images sont moyennées pour mesurer le profil incident non atténué $I_0(u, v)$.
+    \item \textbf{Balayage tomographique}~: L'échantillon étant immobilisé sur la platine, $N = 720$ projections radiographiques sont acquises à pas régulier de $\Delta \theta = 0{,}500 \pm 0{,}005^\circ$ sur un tour complet de $360^\circ$ ($0^\circ \text{ à } 359{,}5^\circ$).
+\end{enumerate}
+
+\subsection{Chaîne numérique de traitement et calibration spatiale}
+Les projections brutes sont traitées à l'aide d'une chaîne logicielle développée sous Python (NumPy, SciPy, Scikit-Image, Napari)~:
+\begin{itemize}
+    \item \textbf{Normalisation Beer-Lambert}~: $p_\theta(u, v) = -\ln\left( \frac{I_\theta(u, v) - I_{\text{dark}}(u, v)}{I_0(u, v) - I_{\text{dark}}(u, v)} \right)$.
+    \item \textbf{Filtrage des artéfacts en anneaux}~: Suppression des dérives de gain de pixels fixes du capteur par filtrage médian stationnaire le long de l'axe angulaire $\theta$~\cite{sijbers2004reduction}.
+    \item \textbf{Recalage sub-pixel du centre de rotation (COR)}~: Recherche automatique par optimisation de netteté des gradients radiaux.
+    \item \textbf{Reconstruction FBP}~: Rétroprojection filtrée discrète avec filtre rampe de Ram-Lak apodisé.
+    \item \textbf{Étalonnage de l'échelle spatiale}~: L'échelle spatiale préliminaire ($s_{\text{pixel}} \approx 0{,}100~\text{mm/pixel}$) adoptée lors de la première séance est consolidée lors de la seconde séance en mesurant avec un pied à coulisse certifié ($\pm 0{,}02~\text{mm}$) les cotes extérieures des cubes étalons et en les rapportant au nombre de pixels reconstruits.
+\end{itemize}

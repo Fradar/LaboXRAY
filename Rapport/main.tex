@@ -1,0 +1,120 @@
+\documentclass[11pt,letterpaper]{article}
+
+% --- Paquets linguistiques et d'encodage ---
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage{lmodern}
+\usepackage{microtype}
+
+% --- Paquets mathématiques et scientifiques ---
+\usepackage{amsmath, amssymb, amsfonts}
+\usepackage{siunitx}
+\sisetup{
+    output-decimal-marker = {,},
+    inter-unit-product = \ensuremath{{}\cdot{}},
+    separate-uncertainty = true
+}
+
+% --- Mise en page et géométrie ---
+\usepackage[top=2.0cm, bottom=2.0cm, left=2.2cm, right=2.2cm]{geometry}
+\usepackage{fancyhdr}
+\linespread{1.08}
+
+% --- Graphiques et tableaux de qualité publication ---
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{caption}
+\usepackage{subcaption}
+\captionsetup{
+    font=small,
+    labelfont=bf,
+    format=plain,
+    justification=justified
+}
+
+% --- Hyperliens et références ---
+\usepackage{xcolor}
+\definecolor{navyblue}{RGB}{0, 32, 96}
+\usepackage[
+    colorlinks=true,
+    linkcolor=navyblue,
+    citecolor=navyblue,
+    urlcolor=navyblue,
+    pdftitle={Contrôle non destructif et métrologie dimensionnelle interne par tomodensitométrie à rayons X},
+    pdfauthor={François Bédard et Félix-Antoine Lavoie}
+]{hyperref}
+\usepackage{cite}
+
+% --- Configuration des en-têtes et pieds de page ---
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small \textit{Travaux pratiques avancés (GPH-4102) -- Tomodensitométrie X}}
+\fancyhead[R]{\small \textit{Université Laval}}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0pt}
+
+% =========================================================================
+%                               DOCUMENT
+% =========================================================================
+\begin{document}
+
+% -------------------------------------------------------------------------
+%                       PAGE DE TITRE (STYLE EXACT DEMANDÉ)
+% -------------------------------------------------------------------------
+\begin{titlepage}
+\begin{center}
+\includegraphics[width=0.35\textwidth]{ul_logo.pdf}\\[0.8cm]
+\line(1,0){450}\\[2mm]
+{\large\textbf{Contrôle non destructif et métrologie dimensionnelle interne\\par tomodensitométrie à rayons X}}\\[2mm]
+\line(1,0){450}\\[1.6cm]
+
+Réalisé par\\
+François Bédard (536 906 601)\\
+Félix-Antoine Lavoie\\[1.8cm]
+
+Dans le cadre du cours\\
+Travaux pratiques avancés\\
+(GPH-4102)\\[1.6cm]
+
+Travail présenté à\\
+Simon Rainville\\[2.0cm]
+
+Département de physique, de génie physique et d'optique\\
+Faculté des sciences et de génie\\
+Université Laval\\[1.4cm]
+
+Dates d'expérimentation~: 17 et 24 septembre 2026\\
+Date de remise~: 8 octobre 2026
+\end{center}
+\end{titlepage}
+
+% -------------------------------------------------------------------------
+%                       RÉSUMÉ SCIENTIFIQUE (PAGE 2)
+% -------------------------------------------------------------------------
+\begin{abstract}
+\noindent L'essor de la fabrication additive permet la conception de géométries internes allégées et complexes dont le contrôle de conformité géométrique et l'intégrité structurelle (canaux internes, cavités, sous-extrusions) ne peuvent être sondés de l'extérieur sans détruire la pièce. Cette étude met en \oe{}uvre une chaîne complète de tomodensitométrie à rayons X de laboratoire (micro-CT) pour le contrôle non destructif (CND) et la métrologie dimensionnelle interne d'échantillons en poly(acide lactique) (PLA). L'approche repose sur deux séances expérimentales. Une première phase de mise au point méthodologique sur une pièce biomimétique complexe en PLA a permis de lever l'ambiguïté cinématique d'orientation de l'axe de rotation (axe le long des colonnes du capteur) et de calibrer le centre de rotation (\emph{Center of Rotation}, COR) à l'échelle sous-pixel ($\Delta x_{\text{COR}} = -11{,}6 \pm 0{,}2~\text{pixels}$, soit $-1{,}16 \pm 0{,}02~\text{mm}$), éliminant les artéfacts de dédoublement et bonifiant le rapport signal sur bruit ($SNR$) de $+14{,}2~\text{dB}$. Le c\oe{}ur de l'étude (séance 2) applique ce banc optimisé à la caractérisation métrologique de cubes de référence en PLA comportant des défauts étalonnés de dimensions connues (cylindres traversants et encoches internes de sections micrométriques variées). L'extraction de profils d'atténuation et la mesure de largeur à mi-hauteur (FWHM) confrontent directement les dimensions reconstruites aux fichiers numériques CAO nominaux, permettant de quantifier l'exactitude dimensionnelle, le rapport contraste sur bruit (CNR) et la limite de résolution spatiale du tomographe de laboratoire.
+\end{abstract}
+
+\vspace{0.8cm}
+
+% -------------------------------------------------------------------------
+%                           SECTIONS DU RAPPORT
+% -------------------------------------------------------------------------
+\input{sections/01_introduction.tex}
+\input{sections/02_theorie.tex}
+\input{sections/03_methodologie.tex}
+\input{sections/04_resultats_cheval.tex}
+\input{sections/05_metrologie_cubes_preview.tex}
+\input{sections/06_discussion.tex}
+\input{sections/07_conclusion.tex}
+
+% -------------------------------------------------------------------------
+%                              BIBLIOGRAPHIE
+% -------------------------------------------------------------------------
+\newpage
+\bibliographystyle{ieeetr}
+\bibliography{references}
+
+\end{document}

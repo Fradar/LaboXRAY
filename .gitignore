@@ -1,0 +1,33 @@
+.venv
+.venv/
+venv/
+ENV/
+env/
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Système d'exploitation
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Fichiers volumineux > 100 Mo (Volumes 3D reconstruits)
+# Ces fichiers peuvent être régénérés localement via python reconstruction_ct.py
+*.npy
+*.npz
+
+# Fichiers temporaires de compilation LaTeX (dans Rapport/)
+*.aux
+*.log
+*.out
+*.toc
+*.bbl
+*.blg
+*.fls
+*.fdb_latexmk
+*.synctex.gz

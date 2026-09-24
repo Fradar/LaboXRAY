@@ -1,0 +1,70 @@
+\section{Fondements théoriques}
+\label{sec:theorie}
+
+\subsection{Atténuation des rayons X et loi de Beer-Lambert}
+Lorsqu'un faisceau monochromatique de rayons X d'intensité initiale $I_0$ traverse un milieu matériel hétérogène le long d'une trajectoire rectiligne $L$, l'intensité transmise $I$ obéit à la loi d'atténuation de Beer-Lambert intégrale~\cite{bloch2020reconstruction, kak1988principles}~:
+\begin{equation}
+    I = I_0 \exp\left( - \int_{L} \mu(x, y, z) \, \mathrm{d}l \right),
+    \label{eq:beer_lambert}
+\end{equation}
+où $\mu(x, y, z)$ représente le coefficient linéique d'atténuation local (en $\text{cm}^{-1}$). Dans le domaine des rayons X mous ($20 \text{ à } 35~\text{keV}$) utilisé par notre tube sous $35{,}0~\text{kV}$, l'atténuation dans la matière condensée est dominée par l'effet photoélectrique. Selon la relation semi-empirique de Bragg-Pierce, le coefficient massique d'atténuation s'exprime par~:
+\begin{equation}
+    \frac{\mu}{\rho} \propto \frac{Z_{\text{eff}}^{k}}{E^3},
+    \label{eq:bragg_pierce}
+\end{equation}
+où $\rho$ est la masse volumique du matériau, $E$ l'énergie des photons incidents, $Z_{\text{eff}}$ le numéro atomique effectif, et $k \approx 3{,}5 \text{ à } 4$. Pour le poly(acide lactique) ($[\text{C}_3\text{H}_4\text{O}_2]_n$, $\rho \approx 1{,}24~\text{g/cm}^3$, $Z_{\text{eff}} \approx 7{,}00$), l'atténuation est modérée mais offre un contraste d'absorption net face à l'air ambiant ($Z_{\text{eff}} \approx 7{,}6$, $\rho \approx 1{,}2 \times 10^{-3}~\text{g/cm}^3$).
+
+\subsection{Transformée de Radon et rétroprojection simple}
+Dans un plan de coupe bidimensionnel $(x, y)$, en paramétrant chaque rayon par son orientation angulaire $\theta \in [0, \pi[$ et sa distance à l'origine $u \in \mathbb{R}$, la projection d'atténuation logarithmique normalisée $p_\theta(u) = -\ln(I/I_0)$ définit la transformée de Radon de la cartographie $f(x, y) = \mu(x, y)$~\cite{bloch2020reconstruction}~:
+\begin{equation}
+    p_\theta(u) = \mathcal{R}[f](\theta, u) = \int_{-\infty}^{\infty} \int_{-\infty}^{\infty} f(x, y) \, \delta(x \cos\theta + y \sin\theta - u) \, \mathrm{d}x \, \mathrm{d}y.
+    \label{eq:radon}
+\end{equation}
+L'ensemble des profils $p_\theta(u)$ empilés en fonction de $\theta$ forme le \emph{sinogramme}.
+
+L'approche naïve de reconstruction consiste à sommer l'ensemble des projections sur tous les angles le long de leurs trajets respectifs. Cette opération définit l'opérateur de rétroprojection simple $\mathcal{B}$~:
+\begin{equation}
+    \mathcal{B}[p](x, y) = \int_{0}^{\pi} p_\theta(x \cos\theta + y \sin\theta) \, \mathrm{d}\theta.
+    \label{eq:backprojection_simple}
+\end{equation}
+Comme le démontre Bloch~\cite{bloch2020reconstruction}, l'image issue de cette simple rétroprojection ne restitue pas $f(x, y)$, mais correspond à sa convolution par un filtre spatial en $1/r$~:
+\begin{equation}
+    \mathcal{B}[p](x, y) = f(x, y) * \frac{1}{\sqrt{x^2 + y^2}}.
+    \label{eq:flou_retroprojection}
+\end{equation}
+La rétroprojection simple produit ainsi une image inévitablement floutée, où chaque point dense s'entoure d'un halo divergent en $1/r$.
+
+\subsection{Rétroprojection filtrée (FBP) et fenêtrage}
+Pour déconvoluer ce flou géométrique, on applique le théorème de projection centrale (\emph{Fourier Slice Theorem})~: la transformée de Fourier 1D d'une projection $p_\theta(u)$ à la fréquence spatiale $U$ est égale à la coupe radiale de la transformée de Fourier 2D de l'objet, $F(U \cos\theta, U \sin\theta)$. 
+
+La reconstruction exacte s'obtient alors par l'algorithme de rétroprojection filtrée (\emph{Filtered Backprojection}, FBP)~\cite{bloch2020reconstruction, kak1988principles}~:
+\begin{equation}
+    f(x, y) = \int_{0}^{\pi} \tilde{p}_\theta(x \cos\theta + y \sin\theta) \, \mathrm{d}\theta,
+    \label{eq:fbp}
+\end{equation}
+où chaque projection filtrée $\tilde{p}_\theta(u)$ résulte de l'application d'un filtre rampe $|U|$ (filtre de Ramachandran-Lakshminarayanan, ou Ram-Lak) dans l'espace de Fourier, pondéré par une fenêtre passe-bas $W(U)$ (telle que celle de Shepp-Logan ou de Hamming)~:
+\begin{equation}
+    \tilde{p}_\theta(u) = \mathcal{F}^{-1} \left[ \mathcal{F}[p_\theta](U) \cdot |U| \cdot W(U) \right].
+    \label{eq:ramlak_window}
+\end{equation}
+Le filtre rampe compense exactement la densité d'échantillonnage en $1/r$ au centre du domaine de Fourier, tandis que la fenêtre $W(U)$ atténue les composantes à haute fréquence afin d'éviter l'amplification démesurée du bruit de mesure.
+
+\subsection{Sensibilité au centre de rotation (COR)}
+Dans un système d'imagerie réel, l'axe physique de rotation de la platine doit coïncider rigoureusement avec le centre de l'espace de rétroprojection numérique. Si l'axe mécanique présente un décalage horizontal $\Delta s_{\text{COR}}$ par rapport au centre du détecteur, deux projections opposées à $\theta$ et $\theta + \pi$ subissent des translations opposées de part et d'autre de l'objet~:
+\begin{equation}
+    p(\theta + \pi, -u) = p(\theta, u + 2 \Delta s_{\text{COR}}).
+    \label{eq:cor_error}
+\end{equation}
+Ce décalage de $2 \Delta s_{\text{COR}}$ se traduit dans la coupe reconstruite par des dédoublements de contours en «~croissant de lune~» et une perte critique de netteté spatiale. Une calibration géométrique sub-pixel du centre de rotation est donc indispensable avant toute exploitation métrologique.
+
+\subsection{Formalisme de propagation des incertitudes}
+Conformément aux normes d'analyse de données expérimentales en physique~\cite{bevington2003data}, toute grandeur mesurée est exprimée sous la forme $x \pm \Delta x$. Pour une grandeur dérivée $f(x_1, x_2, \dots, x_n)$ dépendant de variables indépendantes entachées d'incertitudes absolues $\Delta x_i$, l'incertitude combinée $\Delta f$ est calculée par sommation quadratique des dérivées partielles~:
+\begin{equation}
+    \Delta f = \sqrt{\sum_{i=1}^{n} \left( \frac{\partial f}{\partial x_i} \, \Delta x_i \right)^2}.
+    \label{eq:propagation_incertitude}
+\end{equation}
+Pour une épaisseur de paroi mesurée par largeur à mi-hauteur (\emph{Full Width at Half Maximum}, FWHM), $w = N_{\text{fwhm}} \times s_{\text{pixel}}$, l'incertitude combinée s'obtient à partir de la résolution du détecteur $\Delta s_{\text{pixel}}$ et du pas d'interpolation du seuil à mi-hauteur $\Delta N_{\text{fwhm}}$~:
+\begin{equation}
+    \Delta w = \sqrt{ \left( s_{\text{pixel}} \, \Delta N_{\text{fwhm}} \right)^2 + \left( N_{\text{fwhm}} \, \Delta s_{\text{pixel}} \right)^2 }.
+    \label{eq:incertitude_fwhm}
+\end{equation}
