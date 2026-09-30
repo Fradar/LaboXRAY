@@ -1,35 +1,17 @@
 \section{Dispositif expérimental et chaîne de traitement}
 \label{sec:methodologie}
 
-\subsection{Banc de tomodensitométrie de laboratoire}
-Le dispositif expérimental repose sur le système de tomodensitométrie assistée par ordinateur de paillasse de LD DIDACTIC GmbH~\cite{lddidactic2020}. Le système est logé dans une enceinte blindée contre les rayonnements ionisants munie de portes vitrées en verre au plomb avec verrouillage de sécurité électrique. Il comprend trois sous-ensembles principaux~:
+\subsection{Banc de tomodensitométrie et spécimens d'essai}
+Nous utilisons le banc de tomodensitométrie de table de LD DIDACTIC GmbH~\cite{lddidactic2020}, installé dans une enceinte blindée avec portes en verre au plomb et verrouillage sécurisé. L'appareil est muni d'un tube à rayons X à anode d'or (Au) alimenté sous une tension de $U = 35{,}0 \pm 0{,}1~\text{kV}$ et un courant de $I = 1{,}00 \pm 0{,}02~\text{mA}$. Cette énergie permet de traverser adéquatement des pièces en plastique de $20 \text{ à } 30~\text{mm}$ d'épaisseur. La pièce à analyser est fixée sur une platine tournante pas-à-pas (précision angulaire de $\pm 0{,}01^\circ$). Les rayons X transmis sont captés par un détecteur CMOS muni d'un scintillateur, avec un temps de pose de $t_{\text{int}} = 825 \pm 5~\text{ms}$ par image.
+
+L'étude a été réalisée sur deux cubes en poly(acide lactique) (PLA) imprimés en 3D avec une buse de $0{,}40 \pm 0{,}01~\text{mm}$~: le \textbf{Cube 1} ($30 \times 30 \times 30~\text{mm}^3$, avec trois fentes de $1{,}00$, $0{,}50$ et $0{,}20~\text{mm}$ et une encoche d'angle de $5{,}00~\text{mm}$) et le \textbf{Cube 2} ($30 \times 30 \times 14~\text{mm}^3$), qui sert de pièce de test principale avec quatre niveaux étagés~: des fentes planes (Niveau 1), quatre canaux cylindriques traversants ($\varnothing = 2{,}0$, $1{,}0$, $0{,}5$ et $0{,}2~\text{mm}$, Niveau 2), les lettres en creux «~FBFAL~» de $1{,}0~\text{mm}$ de profondeur (Niveau 3) et un peigne d'encoches périodiques de pas $1{,}0~\text{mm}$ (Niveau 4).
+
+\subsection{Protocole d'acquisition et traitement des images}
+Avant chaque scan, nous enregistrons 20 images d'obscurité (\emph{Dark Field}, $I_{\text{dark}}$) pour soustraire le bruit thermique du capteur, puis 20 images à vide sans échantillon (\emph{Flat Field}, $I_0$) pour corriger l'hétérogénéité spatiale du faisceau. La tomographie complète enregistre $N = 720$ projections réparties sur $360^\circ$ ($\Delta \theta = 0{,}500 \pm 0{,}005^\circ$).
+
+Le traitement des images a été développé en Python (avec NumPy, SciPy, Scikit-Image et Napari)~:
 \begin{enumerate}
-    \item \textbf{Source de rayons X}~: Un tube à rayons X à anode d'or (Au) alimenté sous une haute tension stabilisée réglable de $U = 35{,}0 \pm 0{,}1~\text{kV}$ et un courant cathodique régulé de $I = 1{,}00 \pm 0{,}02~\text{mA}$. L'anode d'or a été retenue pour maximiser le flux continu de freinage (\emph{Bremsstrahlung}) et les raies caractéristiques énergétiques ($L_{\alpha} \approx 9{,}7~\text{keV}$, $L_{\beta} \approx 11{,}4~\text{keV}$), idéales pour traverser des pièces thermoplastiques de $20 \text{ à } 30~\text{mm}$.
-    \item \textbf{Platine goniométrique motorisée}~: Une platine tournante pas-à-pas de haute précision entraînant l'échantillon autour de son axe vertical. La répétabilité angulaire nominale est de $\pm 0{,}01^\circ$.
-    \item \textbf{Détecteur matriciel numérique}~: Un écran scintillateur de conversion X-visible couplé à un capteur d'imagerie CMOS haute sensibilité, interfacé par connexion Ethernet. Le temps d'intégration par pose radiologique est ajusté à $t_{\text{int}} = 825 \pm 5~\text{ms}$.
+    \item \textbf{Normalisation radiométrique}~: Conversion logarithmique selon la loi de Beer-Lambert~: $p_\theta(u, v) = -\ln[ (I_\theta - I_{\text{dark}})/(I_0 - I_{\text{dark}}) ]$.
+    \item \textbf{Alignement et centrage sub-pixel (COR)}~: Vérification de la verticalité de l'axe le long des colonnes du capteur et optimisation de la position du centre de rotation ($\Delta s_{\text{COR}} = +43{,}0~\text{px}$ pour le Cube 2) par maximisation de la netteté des contours, ce qui supprime les dédoublements avec un gain de $SNR > +14~\text{dB}$.
+    \item \textbf{Filtrage d'anneaux et rétroprojection}~: Réduction des artéfacts circulaires par un filtre médian le long de l'angle~\cite{sijbers2004reduction} combiné à une variation totale (TV), puis reconstruction 3D par rétroprojection filtrée (FBP) avec un filtre de Ram-Lak.
 \end{enumerate}
-
-\subsection{Spécimens d'essai en polymère (PLA)}
-Deux séries d'échantillons en poly(acide lactique) (PLA) sont mises en \oe{}uvre~:
-\begin{itemize}
-    \item \textbf{Spécimen préliminaire (Séance 1)}~: Une pièce de géométrie biomimétique complexe (cheval stylisé) imprimée en laboratoire par dépôt de fil fondu (FDM) à l'aide d'une buse standard de $0{,}40 \pm 0{,}01~\text{mm}$, avec $2$ périmètres extérieurs (épaisseur théorique de $0{,}80 \pm 0{,}02~\text{mm}$) et un taux de remplissage interne de $15 \text{ à } 20\,\%$ en trame triangulaire.
-    \item \textbf{Cubes étalons métrologiques (Séance 2)}~: Des cubes étalons en PLA de dimensions nominales connues ($20 \times 20 \times 20~\text{mm}^3$), intégrant des défauts internes usinés numériquement dans le modèle CAO~: une série de canaux cylindriques traversants de diamètres échelonnés et des encoches internes (fentes et cavités) de profondeurs et largeurs calibrées.
-\end{itemize}
-
-\subsection{Protocole d'acquisition et étalonnage radiométrique}
-Pour chaque objet, la séquence d'acquisition comprend~:
-\begin{enumerate}
-    \item \textbf{Correction du courant d'obscurité (\emph{Dark Field})}~: Tube X éteint, $20$ images consécutives sont moyennées pour enregistrer l'offset thermique de fond $I_{\text{dark}}(u, v)$ et isoler les pixels défectueux.
-    \item \textbf{Correction de champ plat (\emph{Flat Field})}~: Tube X allumé ($35{,}0~\text{kV}$, $1{,}00~\text{mA}$) en l'absence de l'objet, $20$ images sont moyennées pour mesurer le profil incident non atténué $I_0(u, v)$.
-    \item \textbf{Balayage tomographique}~: L'échantillon étant immobilisé sur la platine, $N = 720$ projections radiographiques sont acquises à pas régulier de $\Delta \theta = 0{,}500 \pm 0{,}005^\circ$ sur un tour complet de $360^\circ$ ($0^\circ \text{ à } 359{,}5^\circ$).
-\end{enumerate}
-
-\subsection{Chaîne numérique de traitement et calibration spatiale}
-Les projections brutes sont traitées à l'aide d'une chaîne logicielle développée sous Python (NumPy, SciPy, Scikit-Image, Napari)~:
-\begin{itemize}
-    \item \textbf{Normalisation Beer-Lambert}~: $p_\theta(u, v) = -\ln\left( \frac{I_\theta(u, v) - I_{\text{dark}}(u, v)}{I_0(u, v) - I_{\text{dark}}(u, v)} \right)$.
-    \item \textbf{Filtrage des artéfacts en anneaux}~: Suppression des dérives de gain de pixels fixes du capteur par filtrage médian stationnaire le long de l'axe angulaire $\theta$~\cite{sijbers2004reduction}.
-    \item \textbf{Recalage sub-pixel du centre de rotation (COR)}~: Recherche automatique par optimisation de netteté des gradients radiaux.
-    \item \textbf{Reconstruction FBP}~: Rétroprojection filtrée discrète avec filtre rampe de Ram-Lak apodisé.
-    \item \textbf{Étalonnage de l'échelle spatiale}~: L'échelle spatiale préliminaire ($s_{\text{pixel}} \approx 0{,}100~\text{mm/pixel}$) adoptée lors de la première séance est consolidée lors de la seconde séance en mesurant avec un pied à coulisse certifié ($\pm 0{,}02~\text{mm}$) les cotes extérieures des cubes étalons et en les rapportant au nombre de pixels reconstruits.
-\end{itemize}

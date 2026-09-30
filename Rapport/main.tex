@@ -17,21 +17,33 @@
 }
 
 % --- Mise en page et géométrie ---
-\usepackage[top=2.0cm, bottom=2.0cm, left=2.2cm, right=2.2cm]{geometry}
+\usepackage[top=1.7cm, bottom=1.7cm, left=1.9cm, right=1.9cm]{geometry}
 \usepackage{fancyhdr}
-\linespread{1.08}
+\linespread{1.01}
 
 % --- Graphiques et tableaux de qualité publication ---
 \usepackage{graphicx}
 \usepackage{booktabs}
 \usepackage{caption}
 \usepackage{subcaption}
+\usepackage{enumitem}
+\setlist{nosep, topsep=2pt, leftmargin=1.5em}
 \captionsetup{
     font=small,
     labelfont=bf,
     format=plain,
+    skip=4pt,
     justification=justified
 }
+
+% --- Gestion optimale des flottants (évite les pages blanches / isolées) ---
+\renewcommand{\topfraction}{0.88}
+\renewcommand{\bottomfraction}{0.85}
+\renewcommand{\textfraction}{0.12}
+\renewcommand{\floatpagefraction}{0.85}
+\setlength{\textfloatsep}{8pt plus 2pt minus 2pt}
+\setlength{\intextsep}{8pt plus 2pt minus 2pt}
+\setlength{\floatsep}{8pt plus 2pt minus 2pt}
 
 % --- Hyperliens et références ---
 \usepackage{xcolor}
@@ -54,6 +66,15 @@
 \fancyfoot[C]{\thepage}
 \renewcommand{\headrulewidth}{0.4pt}
 \renewcommand{\footrulewidth}{0pt}
+
+% --- Formatage compact de la bibliographie ---
+\let\oldbibliography\thebibliography
+\renewcommand{\thebibliography}[1]{%
+  \oldbibliography{#1}%
+  \small
+  \setlength{\itemsep}{0.5pt}%
+  \setlength{\parskip}{0pt}%
+}
 
 % =========================================================================
 %                               DOCUMENT
@@ -94,10 +115,10 @@ Date de remise~: 8 octobre 2026
 %                       RÉSUMÉ SCIENTIFIQUE (PAGE 2)
 % -------------------------------------------------------------------------
 \begin{abstract}
-\noindent L'essor de la fabrication additive permet la conception de géométries internes allégées et complexes dont le contrôle de conformité géométrique et l'intégrité structurelle (canaux internes, cavités, sous-extrusions) ne peuvent être sondés de l'extérieur sans détruire la pièce. Cette étude met en \oe{}uvre une chaîne complète de tomodensitométrie à rayons X de laboratoire (micro-CT) pour le contrôle non destructif (CND) et la métrologie dimensionnelle interne d'échantillons en poly(acide lactique) (PLA). L'approche repose sur deux séances expérimentales. Une première phase de mise au point méthodologique sur une pièce biomimétique complexe en PLA a permis de lever l'ambiguïté cinématique d'orientation de l'axe de rotation (axe le long des colonnes du capteur) et de calibrer le centre de rotation (\emph{Center of Rotation}, COR) à l'échelle sous-pixel ($\Delta x_{\text{COR}} = -11{,}6 \pm 0{,}2~\text{pixels}$, soit $-1{,}16 \pm 0{,}02~\text{mm}$), éliminant les artéfacts de dédoublement et bonifiant le rapport signal sur bruit ($SNR$) de $+14{,}2~\text{dB}$. Le c\oe{}ur de l'étude (séance 2) applique ce banc optimisé à la caractérisation métrologique de cubes de référence en PLA comportant des défauts étalonnés de dimensions connues (cylindres traversants et encoches internes de sections micrométriques variées). L'extraction de profils d'atténuation et la mesure de largeur à mi-hauteur (FWHM) confrontent directement les dimensions reconstruites aux fichiers numériques CAO nominaux, permettant de quantifier l'exactitude dimensionnelle, le rapport contraste sur bruit (CNR) et la limite de résolution spatiale du tomographe de laboratoire.
+\noindent L'impression 3D permet de concevoir des pièces avec des géométries internes complexes qu'on ne peut pas vérifier facilement sans couper ou briser l'échantillon. Dans ce travail, nous évaluons la précision de mesure d'un banc de tomodensitométrie à rayons X (micro-CT) de laboratoire pour inspecter de manière non destructive des cubes en plastique (PLA) contenant des défauts connus. Le traitement des données comprend le centrage précis de l'axe de rotation (gain de $+14{,}2~\text{dB}$ sur le rapport signal sur bruit) et l'étalonnage spatial du détecteur, mesuré à $s_{\text{pixel}} = 0{,}1154 \pm 0{,}0003~\text{mm/pixel}$. En comparant nos reconstructions 3D aux fichiers CAO d'origine (STL), nous obtenons une très bonne concordance pour toutes les structures d'au moins $1{,}0~\text{mm}$ (canaux de $\varnothing = 2{,}0$ et $1{,}0~\text{mm}$, fentes et peigne), avec des écarts résiduels n'excédant pas $\pm 0{,}04~\text{mm}$ (erreurs relatives $\le 4{,}0\,\%$). En revanche, les canaux plus fins de $0{,}50$ et $0{,}20~\text{mm}$ ne sont pas visibles sur nos images, ce qui met en évidence la limite de résolution spatiale de notre banc causée par la taille du foyer du tube ($U_g \approx 0{,}125~\text{mm}$) et l'effet de volume partiel. Enfin, nous analysons l'effet d'une légère inclinaison lors de la fixation de la pièce ($\sim 3^\circ$) ainsi que le masquage des cavités lors du rendu 3D global, et nous proposons des améliorations pratiques pour la métrologie industrielle.
 \end{abstract}
 
-\vspace{0.8cm}
+\vspace{0.4cm}
 
 % -------------------------------------------------------------------------
 %                           SECTIONS DU RAPPORT
@@ -105,7 +126,6 @@ Date de remise~: 8 octobre 2026
 \input{sections/01_introduction.tex}
 \input{sections/02_theorie.tex}
 \input{sections/03_methodologie.tex}
-\input{sections/04_resultats_cheval.tex}
 \input{sections/05_metrologie_cubes_preview.tex}
 \input{sections/06_discussion.tex}
 \input{sections/07_conclusion.tex}
@@ -113,7 +133,6 @@ Date de remise~: 8 octobre 2026
 % -------------------------------------------------------------------------
 %                              BIBLIOGRAPHIE
 % -------------------------------------------------------------------------
-\newpage
 \bibliographystyle{ieeetr}
 \bibliography{references}
 

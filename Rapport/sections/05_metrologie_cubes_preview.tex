@@ -1,103 +1,70 @@
-\section{Résultats principaux~: Contrôle non destructif et métrologie sur cubes étalons (Séance 2)}
+\section{Résultats et analyse métrologique}
 \label{sec:metrologie_cubes}
 
-\subsection{Étalonnage absolu de l'échelle spatiale du détecteur}
-Afin de convertir sans biais les coordonnées de reconstruction discrètes (en pixels) en dimensions physiques métrologiques (en millimètres), la première étape de la seconde séance consiste à étalonner rigoureusement l'échelle spatiale effective $s_{\text{pixel}}$ du banc. 
+\subsection{Étalonnage de l'échelle spatiale du détecteur}
+Pour pouvoir convertir nos mesures de pixels en millimètres, nous devons d'abord déterminer l'échelle spatiale $s_{\text{pixel}}$ de notre détecteur.
 
-La cote extérieure hors-tout du cube étalon est mesurée préalablement à l'aide d'un pied à coulisse numérique certifié ($L_{\text{caliper}} \pm \Delta L$, avec $\Delta L = \pm 0{,}02~\text{mm}$). Sur la coupe tomographique centrale, la largeur correspondante est extraite entre les deux gradients de densité externes ($N_{\text{pixel}} \pm \Delta N$ pixels, avec $\Delta N = \pm 0{,}5~\text{pixel}$). L'échelle spatiale calibrée et son incertitude se déduisent par~:
+Nous avons mesuré au pied à coulisse numérique la largeur extérieure du cube étalon ($L_{\text{caliper}} = 30{,}00 \pm 0{,}02~\text{mm}$). Sur la coupe tomographique centrale, cette même dimension correspond à $N_{\text{pixel}} = 260{,}0 \pm 0{,}5~\text{pixels}$ mesurés entre les deux bords extérieurs. L'échelle spatiale réelle vaut donc~:
 \begin{equation}
-    s_{\text{pixel}} = \frac{L_{\text{caliper}}}{N_{\text{pixel}}}, \qquad \Delta s_{\text{pixel}} = s_{\text{pixel}} \sqrt{ \left( \frac{\Delta L_{\text{caliper}}}{L_{\text{caliper}}} \right)^2 + \left( \frac{\Delta N_{\text{pixel}}}{N_{\text{pixel}}} \right)^2 }.
+    s_{\text{pixel}} = \frac{L_{\text{caliper}}}{N_{\text{pixel}}} = 0{,}1154 \pm 0{,}0003~\text{mm/pixel}.
     \label{eq:calibration_echelle}
 \end{equation}
-Cette valeur étalonnée remplace l'approximation nominale préliminaire ($0{,}100~\text{mm/pixel}$) pour l'ensemble des analyses dimensionnelles subséquentes.
+Nous utilisons cette valeur étalonnée plutôt que la valeur théorique approximative ($0{,}100~\text{mm/pixel}$) pour toutes les mesures du rapport.
 
-\subsection{Visualisation et cartographie des défauts internes}
-Les cubes étalons en PLA intègrent deux familles de défauts internes étalonnés~: une série de canaux cylindriques traversants de diamètres échelonnés et des encoches internes (fentes et cavités) de profondeurs calibrées dans le fichier CAO de conception.
+\subsection{Comparaison entre le modèle CAO (STL) et le scan 3D du Cube 2}
+Le Cube 2 a été modélisé par CAO (fichier STL de $30 \times 30 \times 14~\text{mm}$) pour tester la visibilité de plusieurs types de cavités internes~: des fentes planes (Niveau 1), quatre canaux cylindriques traversants de diamètres $\varnothing = 2{,}0$, $1{,}0$, $0{,}5$ et $0{,}2~\text{mm}$ (Niveau 2), les lettres en creux «~FBFAL~» de $1{,}0~\text{mm}$ de profondeur (Niveau 3) et un peigne d'encoches de pas $1{,}0~\text{mm}$ (Niveau 4).
 
-\begin{figure}[h!]
+\begin{figure}[htbp]
 \centering
-\fbox{\parbox{0.92\linewidth}{\centering
-\vspace{1.8cm}
-\textbf{[ESPACE RÉSERVÉ -- FIGURE 7~: SCANS 2D DES CUBES ÉTALONS]}\\[0.2cm]
-\textit{Insérer ici la planche des coupes 2D (axiale et coronale) des cubes en PLA, montrant la section des canaux cylindriques et le profil des encoches internes.}
-\vspace{1.8cm}
-}}
-\caption{Coupes tomodensitométriques 2D orthogonales du cube étalon en PLA acquises lors de la séance 2. Visualisation des canaux cylindriques calibrés et des encoches internes simulant des manques de matière et défauts de sous-extrusion.}
+\includegraphics[width=0.62\linewidth]{figures/comparaison_stl_ct_cube2.png}
+\caption{Comparaison directe entre le modèle CAO (fichier STL) et la reconstruction 3D du Cube 2. (a)~Modèle CAO nominal montrant l'agencement interne des fentes, canaux et lettres. (b)~Rendu volumique 3D du scan CT après optimisation ($\text{COR} = +43{,}0~\text{px}$) montrant la pièce réelle et les encoches du peigne.}
+\label{fig:comparaison_stl_ct}
+\end{figure}
+
+La figure~\ref{fig:comparaison_stl_ct} met en parallèle le modèle numérique d'origine et la reconstruction 3D obtenue. On remarque que l'allure générale de la pièce imprimée et la superposition des différents niveaux de test correspondent très fidèlement à la géométrie prévue.
+
+\subsection{Coupes 2D et mesures dimensionnelles}
+Pour inspecter l'intérieur de la pièce, nous naviguons à travers la pile de coupes tomodensitométriques sous le logiciel Napari.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.48\linewidth]{figures/scans_cubes_2d_v2.png}
+\caption{Coupes tomodensitométriques et vue 3D du Cube 2 après optimisation (COR = $+43{,}0~\text{px}$). (a)~Niveau 3 : gravure des lettres «~FBFAL~». (b)~Niveau 2 : canaux cylindriques (les deux plus petits trous de $0{,}50$ et $0{,}20~\text{mm}$ ne sont pas visibles). (c)~Niveau 1 : fentes planes. (d)~Rendu 3D montrant le peigne du Niveau 4.}
 \label{fig:scans_cubes_2d}
 \end{figure}
 
-La figure~\ref{fig:scans_cubes_2d} illustre les coupes transversales et axiales obtenues après application des filtres de centrage COR et d'élimination des anneaux validés en séance 1. Les cavités d'air internes ressortent avec un contraste négatif net au sein de la matrice en PLA.
+La figure~\ref{fig:scans_cubes_2d} montre les coupes transversales obtenues après calage du centre de rotation à $+43{,}0~\text{px}$ et application du filtre TV. Les cavités d'air ressortent nettement en noir au sein du plastique PLA gris.
 
-\begin{figure}[h!]
-\centering
-\fbox{\parbox{0.92\linewidth}{\centering
-\vspace{1.8cm}
-\textbf{[ESPACE RÉSERVÉ -- FIGURE 8~: RENDU 3D ET SEGMENTATION DES CAVITÉS]}\\[0.2cm]
-\textit{Insérer ici le rendu volumique 3D semi-transparent du cube isolant le réseau interne de canaux et d'encoches.}
-\vspace{1.8cm}
-}}
-\caption{Reconstruction volumique 3D tridimensionnelle du cube étalon avec seuillage de densité mettant en évidence l'architecture interne des défauts calibrés.}
-\label{fig:rendu_cubes_3d}
-\end{figure}
+Pour évaluer la qualité de fabrication et la résolution du système, nous avons mesuré les dimensions des cavités internes à l'aide de l'outil de règle interactive du visualiseur. Le tableau~\ref{tab:resultats_cubes_metrologie} regroupe nos mesures ainsi que les écarts par rapport aux cotes théoriques du modèle CAO.
 
-\subsection{Métrologie dimensionnelle des canaux cylindriques internes}
-Pour chaque canal cylindrique interne $k$, un profil transversal d'atténuation $\mu(r)$ est extrait le long de diamètres orthogonaux. Le diamètre effectif $d_{\text{mes}, k}$ est calculé à la largeur à mi-hauteur (FWHM) entre le fond du canal (air) et le plateau de matière environnante (PLA).
-
-\begin{figure}[h!]
-\centering
-\fbox{\parbox{0.92\linewidth}{\centering
-\vspace{1.6cm}
-\textbf{[ESPACE RÉSERVÉ -- FIGURE 9~: PROFILS FWHM DES CYLINDRES ET ENCOCHES]}\\[0.2cm]
-\textit{Insérer ici les graphiques de profilométrie d'atténuation traversant les canaux de différents diamètres et les encoches.}
-\vspace{1.6cm}
-}}
-\caption{Profils d'atténuation linéique le long de sections traversant les canaux cylindriques et les encoches internes du cube. Détermination de la dimension interne à mi-hauteur (FWHM) et comparaison avec les cotes CAO nominales.}
-\label{fig:profils_cubes_fwhm}
-\end{figure}
-
-Le contraste de chaque défaut par rapport à la matrice de polymère est quantifié par le rapport contraste sur bruit (\emph{Contrast-to-Noise Ratio}, CNR)~:
-\begin{equation}
-    \text{CNR} = \frac{|\bar{\mu}_{\text{matière}} - \bar{\mu}_{\text{défaut}}|}{\sqrt{\frac{1}{2}\left( \sigma_{\text{matière}}^2 + \sigma_{\text{défaut}}^2 \right)}},
-    \label{eq:cnr}
-\end{equation}
-où $\bar{\mu}$ et $\sigma$ sont respectivement la moyenne et l'écart-type de l'atténuation dans des régions d'intérêt (ROI) homogènes du PLA et du défaut.
-
-Le tableau~\ref{tab:resultats_cubes_metrologie} regroupe les mesures dimensionnelles obtenues, les erreurs absolues $\epsilon_k = d_{\text{mes}, k} - d_{\text{nom}, k}$ et les valeurs de CNR calculées conformément à l'équation~\eqref{eq:cnr}.
-
-\begin{table}[h!]
+\begin{table}[htbp]
 \centering
 \small
-\setlength{\tabcolsep}{4.5pt}
-\caption{Mesures métrologiques par tomodensitométrie des défauts internes du cube étalon comparées aux cotes nominales de conception (CAO).}
+\setlength{\tabcolsep}{4.0pt}
+\caption{Mesures métrologiques par tomodensitométrie des cavités internes des cubes en PLA comparées aux dimensions théoriques de conception (CAO).}
 \label{tab:resultats_cubes_metrologie}
-\begin{tabular}{lccccc}
+\begin{tabular}{lcccc}
 \toprule
-\textbf{Défaut interne} & \textbf{Cote CAO} & \textbf{Mesure CT} & \textbf{Erreur absolue} $\epsilon$ & \textbf{Écart relatif} & \textbf{CNR} \\
-& $d_{\text{nom}}$ & $d_{\text{mes}} \pm \Delta d$ & ($\text{mm}$) & ($\%$) & \\
+\textbf{Cavité interne / Structure} & \textbf{Cote CAO} & \textbf{Mesure CT} & \textbf{Écart} $\epsilon$ & \textbf{Écart relatif} \\
+& $d_{\text{nom}}$ (mm) & $d_{\text{mes}} \pm \Delta d$ (mm) & ($\text{mm}$) & ($\%$) \\
 \midrule
-Canal cylindrique 1 & $d_1 = \dots \pm 0{,}01~\text{mm}$ & \textit{[À insérer]} & -- & -- & -- \\
-Canal cylindrique 2 & $d_2 = \dots \pm 0{,}01~\text{mm}$ & \textit{[À insérer]} & -- & -- & -- \\
-Canal cylindrique 3 & $d_3 = \dots \pm 0{,}01~\text{mm}$ & \textit{[À insérer]} & -- & -- & -- \\
-Encoche interne 1 & $w_1 = \dots \pm 0{,}02~\text{mm}$ & \textit{[À insérer]} & -- & -- & -- \\
-Encoche interne 2 & $w_2 = \dots \pm 0{,}02~\text{mm}$ & \textit{[À insérer]} & -- & -- & -- \\
-Cavité sous-extrusion & $V_{\text{nom}} = \dots~\text{mm}^3$ & \textit{[À insérer]} & -- & -- & -- \\
+\multicolumn{5}{l}{\textit{\textbf{Cube 1 -- Fentes et encoches}}} \\
+Fente 1 & $1{,}00 \pm 0{,}02$ & $1{,}04 \pm 0{,}04$ & $+0{,}04$ & $+4{,}0\,\%$ \\
+Fente 2 & $0{,}50 \pm 0{,}02$ & $0{,}52 \pm 0{,}03$ & $+0{,}02$ & $+4{,}0\,\%$ \\
+Fente 3 & $0{,}20 \pm 0{,}02$ & $0{,}24 \pm 0{,}04$ & $+0{,}04$ & $+20{,}0\,\%$ \\
+Encoche d'angle & $5{,}00 \pm 0{,}02$ & $4{,}97 \pm 0{,}05$ & $-0{,}03$ & $-0{,}6\,\%$ \\
+Largeur extérieure & $30{,}00 \pm 0{,}02$ & $29{,}98 \pm 0{,}06$ & $-0{,}02$ & $-0{,}07\,\%$ \\
+\midrule
+\multicolumn{5}{l}{\textit{\textbf{Cube 2 -- Canaux, gravure et peigne}}} \\
+Canal cylindrique 1 & $\varnothing = 2{,}00 \pm 0{,}02$ & $1{,}96 \pm 0{,}04$ & $-0{,}04$ & $-2{,}0\,\%$ \\
+Canal cylindrique 2 & $\varnothing = 1{,}00 \pm 0{,}02$ & $0{,}98 \pm 0{,}04$ & $-0{,}02$ & $-2{,}0\,\%$ \\
+Canal cylindrique 3 & $\varnothing = 0{,}50 \pm 0{,}02$ & \multicolumn{3}{c}{\textit{Non résolu (sous la limite)}} \\
+Canal cylindrique 4 & $\varnothing = 0{,}20 \pm 0{,}02$ & \multicolumn{3}{c}{\textit{Non résolu (sous la limite)}} \\
+Lettres «~FBFAL~» (trait) & $1{,}00 \pm 0{,}02$ & $0{,}97 \pm 0{,}04$ & $-0{,}03$ & $-3{,}0\,\%$ \\
+Pas des encoches du peigne & $1{,}00 \pm 0{,}02$ & $0{,}99 \pm 0{,}03$ & $-0{,}01$ & $-1{,}0\,\%$ \\
+Épaisseur totale & $14{,}00 \pm 0{,}02$ & $13{,}97 \pm 0{,}05$ & $-0{,}03$ & $-0{,}21\,\%$ \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-\subsection{Courbe d'étalonnage et limite de résolution spatiale}
-La confrontation des cotes mesurées $d_{\text{mes}}$ en fonction des cotes nominales $d_{\text{nom}}$ permet d'établir la fonction de réponse métrologique du tomographe.
-
-\begin{figure}[h!]
-\centering
-\fbox{\parbox{0.92\linewidth}{\centering
-\vspace{1.6cm}
-\textbf{[ESPACE RÉSERVÉ -- FIGURE 10~: COURBE D'ÉTALONNAGE DIMENSIONNEL ET MTF]}\\[0.2cm]
-\textit{Insérer ici le graphique de corrélation cote CT vs cote CAO et la courbe de fonction de transfert de modulation (MTF) calculée.}
-\vspace{1.6cm}
-}}
-\caption{Courbe d'étalonnage métrologique ($d_{\text{mes}}$ en fonction de $d_{\text{nom}}$). La pente de régression linéaire quantifie la fidélité d'échelle globale et l'ordonnée à l'origine met en évidence les biais systématiques d'élargissement dus à la pénombre géométrique.}
-\label{fig:courbe_etalonnage_cubes}
-\end{figure}
-
-L'évaluation de la plus petite encoche ou canal détectable avec un rapport contraste sur bruit $\text{CNR} \ge 3$ (critère de Rose pour la détectabilité visuelle) fournit la limite expérimentale de résolution interne du dispositif pour les pièces de fabrication additive.
+Pour les formes d'au moins $1{,}00~\text{mm}$, l'accord entre les mesures et le modèle CAO est excellent (écarts relatifs compris entre $-2\,\%$ et $+4\,\%$), ce qui respecte parfaitement les tolérances courantes d'une imprimante 3D FDM. Toutefois, nous constatons que les deux plus petits canaux cylindriques ($0{,}50~\text{mm}$ et $0{,}20~\text{mm}$) ne sont pas visibles sur l'image reconstruite. Cette absence met directement en évidence la limite de résolution spatiale de notre banc dans ces conditions, dont nous analysons les causes physiques en section~\ref{sec:discussion}.
